@@ -29,7 +29,10 @@ public class innit{
 			logs_folder.mkdirs();
 			System.out.println("logs_folder succesfully created! ");
 		}
-		
+		System.out.println("press any key to continue");
+		Scanner kb = new Scanner(System.in);
+		kb.next();
+		kb.close();
 		
 	}
 }
