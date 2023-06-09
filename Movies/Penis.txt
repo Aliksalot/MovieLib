@@ -1,4 +1,0 @@
-title = Penis
-genre = Pishkoman
-release_date = 6.8.2023
-main_actors = Nigga
