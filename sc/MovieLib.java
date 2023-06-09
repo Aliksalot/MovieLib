@@ -28,10 +28,11 @@ public class MovieLib{
 
             String loadingMoviesException = "Error with loading movies. Wrong entry format?";
 
+
             File movie_folder = new File(moviesFilePath);
 
 			if(moviesFilePath.equals(""))
-                throw new RuntimeException(loadingMoviesException);
+                Debug.Log(new RuntimeException(loadingMoviesException));
 
                 for(File movieData: movie_folder.listFiles()){
                     
@@ -43,27 +44,27 @@ public class MovieLib{
                                 if(!line.contains("title")){
                                     rd.close();
                                     System.out.println(line);
-                                    throw new RuntimeException(loadingMoviesException);
+                                   Debug.Log(new RuntimeException(loadingMoviesException));
                                 }
                                 String title = line.substring(line.indexOf("=") + 1).replaceAll("\\s+","");
                                 //pull the genre out of txt file
                                 line = rd.nextLine();
                                 if(!line.contains("genre")){
                                     rd.close();
-                                    throw new RuntimeException(loadingMoviesException);
+                                    Debug.Log(new RuntimeException(loadingMoviesException));
                                 }
                                 String genre = line.substring(line.indexOf("=") + 1).replaceAll("\\s+","");
                                 //pull the release date out of txt file
                                 line = rd.nextLine();
                                 if(!line.contains("release_date")){
                                     rd.close();
-                                    throw new RuntimeException(loadingMoviesException);
+                                    Debug.Log(new RuntimeException(loadingMoviesException));
                                 }
                                 String release_date = line.substring(line.indexOf("=") + 1).replaceAll("\\s+","");
                                 line = rd.nextLine();
                                 if(!line.contains("main_actors")){
                                     rd.close();
-                                    throw new RuntimeException(loadingMoviesException);
+                                    Debug.Log(new RuntimeException(loadingMoviesException));
                                 }
                                 String[] main_actors = line.substring(line.indexOf("=") + 1).replaceAll("\\s+","").split(",");
                                 Arrays.sort(main_actors);
@@ -72,11 +73,11 @@ public class MovieLib{
                             }
                             rd.close();
                         } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+                           Debug.Log(e);
                         }
-                        //debug
-                    System.out.println("Loaded " + movieData.getAbsolutePath());
-            }          
+                        Debug.Log("Loaded " + movieData.getAbsolutePath());     
+            }
+            System.out.println("Loaded " + movies.size() + " movies succesfully.");          
 
 	}
 
@@ -92,8 +93,7 @@ public class MovieLib{
             wr.append(movie.toString());
             wr.close();
         }catch(IOException e){
-            e.printStackTrace();
-            System.out.println(83);
+            Debug.Log(e);
             return false;
         }
         System.out.println(85);
@@ -106,6 +106,7 @@ public class MovieLib{
 
     public boolean addMovie(Movie newMovie){
         movies.put(newMovie.getTitle(), newMovie);
+        sortedOrder.add(newMovie.getTitle());
         if(newMovieFile(newMovie)){
             System.out.println("Movie succesfully added to MovieLib! ");
             return true;
@@ -115,6 +116,7 @@ public class MovieLib{
     public boolean deleteMovie(String title){
         if(movies.keySet().contains(title)){
             movies.remove(title);
+            sortedOrder.remove(title);
             File movieToRemove = new File(moviesFilePath + "\\" + title + ".txt");
             movieToRemove.delete();
             System.out.println("Movie succesfully deleted from MovieLib! ");
@@ -127,9 +129,12 @@ public class MovieLib{
     //debug
 	public void printList(){
 		//prints all the movies in the previously sorted order
+        if(!sortedOrder.isEmpty() || movies.isEmpty())
         for(String title: sortedOrder){
             System.out.println(movies.get(title) + "\n\n");
         }
+        else
+        System.out.println("No movies to be printed! ");
 	}
 
     public Collection<Movie> getMovies(){
@@ -157,8 +162,6 @@ public class MovieLib{
                     break;
                 }
             }
-            System.out.println(sortedOrder);
-            System.out.println(sortedActors);
 	}
 
 	public void sortByTitle(){
@@ -173,7 +176,6 @@ public class MovieLib{
                 this.sortedOrder.add(0,title);
             }
         }
-        System.out.println(sortedOrder);
 	}
 
 	public void sortByGenre(){
@@ -192,8 +194,7 @@ public class MovieLib{
                     break;
                 }
             }
-            System.out.println(sortedOrder);
-            System.out.println(sortedGenres);
+
 	}
     
 
